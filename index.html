@@ -72,7 +72,7 @@
     const commentsListEl = document.querySelector(".comments");
 
     ButtonEl.addEventListener("click", function() {
-      if (inputEl.value==="" || textareaEl.value==="") {
+      if (inputEl.value.trim()==="" || textareaEl.value.trim()==="") {
         alert("Пожалуйста, заполните все поля!");
         return;
       }
