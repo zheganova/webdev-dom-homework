@@ -94,7 +94,7 @@
       commentsListEl.innerHTML = comments
         .map((comment, index) => {
           return `
-            <li class="comment">
+            <li class="comment" data-index="${index}">
               <div class="comment-header">
                 <div>${comment.name}</div>
                 <div>${comment.date}</div>
@@ -126,11 +126,13 @@
 
       for (const buttonLike of likeButtons) {
         buttonLike.addEventListener("click", () => {
+          event.stopPropagation();
           const commentIndex = buttonLike.dataset.index;
           const comment = comments[commentIndex];// Находим комментарий в массиве comments
           comment.isLiked = !comment.isLiked;// Меняем состояние лайка
           comment.likes += comment.isLiked ? 1 : -1;// Обновляем количество лайков
           renderComments();
+          initCommentClickListeners()
           LikeListeners();
         });
       }
@@ -146,7 +148,7 @@
       }
     
       const newComment = {
-        name: inputEl.value,
+        name: inputEl.value.replace(/</g, "&lt;").replace(/>/g, "&gt;"),
         date: `${new Date().toLocaleDateString("ru-RU", {
           year: "2-digit",
           month: "2-digit",
@@ -155,18 +157,37 @@
           hour: "2-digit",
           minute: "2-digit",
         })}`,
-        text: textareaEl.value,
+        text: textareaEl.value.replace(/</g, "&lt;").replace(/>/g, "&gt;"),
         likes: 0,
         isLiked: false,
       };
 
       comments.push(newComment);
       renderComments();
+      initCommentClickListeners()
       LikeListeners();
 
       inputEl.value = "";
       textareaEl.value = "";
     });
+
+    // Функция для обработки кликов на комментарии
+    const initCommentClickListeners = () => {
+      const commentElements = document.querySelectorAll(".comment");
+
+      for (const commentElement of commentElements) {
+        commentElement.addEventListener("click", () => {
+          const commentIndex = commentElement.dataset.index;
+          const comment = comments[commentIndex];
+
+          // Добавляем имя автора и текст комментария в поле "Текст"
+          textareaEl.value = `> ${comment.name}: ${comment.text}\n\n`;
+          textareaEl.focus(); // Фокусируемся на поле ввода
+        });
+      }
+    };
+
+    initCommentClickListeners();
 
   </script>
 </html>
