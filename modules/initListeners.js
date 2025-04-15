@@ -1,6 +1,7 @@
-import {comments} from "./comments.js";
-import {renderComments} from "./renderComments.js";
-import {escapeHtml} from "./replaceAll.js";
+import { comments } from './comments.js'
+import { renderComments } from './renderComments.js'
+import { escapeHtml } from './replaceAll.js'
+import { updateComments } from './comments.js'
 
 const inputEl = document.querySelector('.add-form-name')
 const textareaEl = document.querySelector('.add-form-text')
@@ -8,18 +9,17 @@ const ButtonEl = document.querySelector('.add-form-button')
 
 // Функция обработчиков лайков
 export function initLikeListeners() {
-    document.querySelectorAll('.like-button').forEach(buttonLike => {
+    document.querySelectorAll('.like-button').forEach((buttonLike) => {
         buttonLike.addEventListener('click', (event) => {
-            event.stopPropagation();
-            const commentIndex = buttonLike.dataset.index;
-            const comment = comments[commentIndex]; // Находим комментарий в массиве comments
-            comment.isLiked = !comment.isLiked; // Меняем состояние лайка
-            comment.likes += comment.isLiked ? 1 : -1; // Обновляем количество лайков
-            renderComments();
-        });
-    });
+            event.stopPropagation()
+            const commentIndex = buttonLike.dataset.index
+            const comment = comments[commentIndex] // Находим комментарий в массиве comments
+            comment.isLiked = !comment.isLiked // Меняем состояние лайка
+            comment.likes += comment.isLiked ? 1 : -1 // Обновляем количество лайков
+            renderComments()
+        })
+    })
 }
-
 
 //Возможность оставить новый комментарий//
 export function initButtonListener() {
@@ -44,6 +44,18 @@ export function initButtonListener() {
             isLiked: false,
         }
 
+        fetch('https://wedev-api.sky.pro/api/v1/polina-zheganova/comments', {
+            method: 'POST',
+            body: JSON.stringify(newComment),
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((date) => {
+                updateComments(appComments)
+                renderComments()
+            })
+
         comments.push(newComment)
         renderComments()
 
@@ -54,14 +66,14 @@ export function initButtonListener() {
 
 // Функция для обработки кликов на комментарии
 export function initCommentClickListeners() {
-    document.querySelectorAll('.comment').forEach(commentElement => {
+    document.querySelectorAll('.comment').forEach((commentElement) => {
         commentElement.addEventListener('click', () => {
-            const commentIndex = commentElement.dataset.index;
-            const comment = comments[commentIndex];
+            const commentIndex = commentElement.dataset.index
+            const comment = comments[commentIndex]
 
             // Добавляем имя автора и текст комментария в поле "Текст"
-            textareaEl.value = `> ${comment.name}: ${comment.text}\n\n`;
-            textareaEl.focus(); // Фокусируемся на поле ввода
-        });
-    });
+            textareaEl.value = `> ${comment.name}: ${comment.text}\n\n`
+            textareaEl.focus() // Фокусируемся на поле ввода
+        })
+    })
 }

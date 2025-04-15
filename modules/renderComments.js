@@ -1,5 +1,8 @@
-import {comments} from "./comments.js";
-import { initLikeListeners, initCommentClickListeners } from './initListeners.js';
+import { comments } from './comments.js'
+import {
+    initLikeListeners,
+    initCommentClickListeners,
+} from './initListeners.js'
 
 const commentsListEl = document.querySelector('.comments')
 
@@ -31,6 +34,6 @@ export function renderComments() {
         })
         .join('')
 
-    initLikeListeners();
-    initCommentClickListeners();
+    initLikeListeners()
+    initCommentClickListeners()
 }
