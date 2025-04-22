@@ -1,7 +1,7 @@
 import { comments } from './comments.js'
 import { renderComments } from './renderComments.js'
 import { escapeHtml } from './replaceAll.js'
-import { updateComments } from './comments.js'
+import { fetchAndRenderComments } from './fetchAndRenderComments.js'
 
 const inputEl = document.querySelector('.add-form-name')
 const textareaEl = document.querySelector('.add-form-text')
@@ -44,23 +44,23 @@ export function initButtonListener() {
             isLiked: false,
         }
 
+        ButtonEl.disabled = true
+        ButtonEl.textContent = 'Создание комментария...'
+
         fetch('https://wedev-api.sky.pro/api/v1/polina-zheganova/comments', {
             method: 'POST',
             body: JSON.stringify(newComment),
         })
-            .then((response) => {
-                return response.json()
+            .then(() => {
+                return fetchAndRenderComments()
             })
-            .then((date) => {
-                updateComments(appComments)
-                renderComments()
+            .then(() => {
+                inputEl.value = ''
+                textareaEl.value = ''
+
+                ButtonEl.disabled = false
+                ButtonEl.textContent = 'Написать'
             })
-
-        comments.push(newComment)
-        renderComments()
-
-        inputEl.value = ''
-        textareaEl.value = ''
     })
 }
 
