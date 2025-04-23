@@ -1,7 +1,5 @@
-import { renderComments } from './modules/renderComments.js'
-import { initButtonListener } from './modules/initListeners.js'
-import { fetchAndRenderComments } from './modules/fetchAndRenderComments.js'
+import { initButtonListener } from './modules/api.js'
+import { fetchAndRenderComments } from './modules/api.js'
 
 fetchAndRenderComments()
-renderComments()
 initButtonListener()

@@ -1,11 +1,7 @@
 import { comments } from './comments.js'
 import { renderComments } from './renderComments.js'
-import { escapeHtml } from './replaceAll.js'
-import { fetchAndRenderComments } from './fetchAndRenderComments.js'
 
-const inputEl = document.querySelector('.add-form-name')
 const textareaEl = document.querySelector('.add-form-text')
-const ButtonEl = document.querySelector('.add-form-button')
 
 // Функция обработчиков лайков
 export function initLikeListeners() {
@@ -18,49 +14,6 @@ export function initLikeListeners() {
             comment.likes += comment.isLiked ? 1 : -1 // Обновляем количество лайков
             renderComments()
         })
-    })
-}
-
-//Возможность оставить новый комментарий//
-export function initButtonListener() {
-    ButtonEl.addEventListener('click', function () {
-        if (inputEl.value.trim() === '' || textareaEl.value.trim() === '') {
-            alert('Пожалуйста, заполните все поля!')
-            return
-        }
-
-        const newComment = {
-            name: escapeHtml(inputEl.value),
-            date: `${new Date().toLocaleDateString('ru-RU', {
-                year: '2-digit',
-                month: '2-digit',
-                day: '2-digit',
-            })} ${new Date().toLocaleTimeString('ru-RU', {
-                hour: '2-digit',
-                minute: '2-digit',
-            })}`,
-            text: escapeHtml(textareaEl.value),
-            likes: 0,
-            isLiked: false,
-        }
-
-        ButtonEl.disabled = true
-        ButtonEl.textContent = 'Создание комментария...'
-
-        fetch('https://wedev-api.sky.pro/api/v1/polina-zheganova/comments', {
-            method: 'POST',
-            body: JSON.stringify(newComment),
-        })
-            .then(() => {
-                return fetchAndRenderComments()
-            })
-            .then(() => {
-                inputEl.value = ''
-                textareaEl.value = ''
-
-                ButtonEl.disabled = false
-                ButtonEl.textContent = 'Написать'
-            })
     })
 }
 
