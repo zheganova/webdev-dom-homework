@@ -10,5 +10,17 @@ export const postComment = (newComment) => {
     return fetch('https://wedev-api.sky.pro/api/v1/polina-zheganova/comments', {
         method: 'POST',
         body: JSON.stringify(newComment),
+    }).then((response) => {
+        if (response.status === 500) {
+            throw new Error('Ошибка сервера')
+        }
+
+        if (response.status === 400) {
+            throw new Error('Неверный запрос')
+        }
+
+        if (response.status === 201) {
+            return response.json()
+        }
     })
 }
