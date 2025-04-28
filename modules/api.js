@@ -10,7 +10,6 @@ export const postComment = (newComment) => {
     return fetch('https://wedev-api.sky.pro/api/v1/polina-zheganova/comments', {
         method: 'POST',
         body: JSON.stringify(newComment),
-        forceError: true, //потом убрать
     }).then((response) => {
         if (response.status === 500) {
             throw new Error('Ошибка сервера')
