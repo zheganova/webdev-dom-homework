@@ -46,6 +46,14 @@ export const login = (login, password) => {
     return fetch(autHost + '/login', {
         method: 'POST',
         body: JSON.stringify({ login: login, password: password }),
+    }).then((response) => {
+        if (response.status === 400) {
+            throw new Error('Неверный запрос')
+        }
+
+        if (response.status === 201) {
+            return response.json()
+        }
     })
 }
 
@@ -53,5 +61,13 @@ export const registration = (name, login, password) => {
     return fetch(autHost, {
         method: 'POST',
         body: JSON.stringify({ name: name, login: login, password: password }),
+    }).then((response) => {
+        if (response.status === 400) {
+            throw new Error('Неверный запрос')
+        }
+
+        if (response.status === 201) {
+            return response.json()
+        }
     })
 }

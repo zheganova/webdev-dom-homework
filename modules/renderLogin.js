@@ -32,13 +32,15 @@ export function renderLogin() {
 
     submitButtonEl.addEventListener('click', () => {
         login(loginEl.value, passwordEl.value)
-            .then((response) => {
-                return response.json()
-            })
             .then((data) => {
                 setToken(data.user.token)
                 setName(data.user.name)
                 fetchAndRender()
+            })
+            .catch((error) => {
+                if (error.message === 'Неверный запрос') {
+                    alert('Неверный логин или пароль')
+                }
             })
     })
 }
